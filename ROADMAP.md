@@ -29,15 +29,15 @@ Chaque case cochée correspond à une fonctionnalité réellement construite et 
 - [x] Intégration PayPal (Orders API v2 + capture + webhook)
 - [x] Intégration Goshippo (tous les tarifs transporteurs affichés au client + achat automatique de l'étiquette)
 - [x] Décrément automatique du stock + historique de statut de commande
-- [ ] Emails transactionnels automatiques (confirmation de compte, commande, paiement, expédition, mot de passe oublié)
+- [x] Emails transactionnels automatiques (confirmation de compte, commande, paiement, expédition, mot de passe oublié)
 
 ## 🕯️ PHASE 3 — Catalogue avancé
 
-- [ ] Variantes produits (tailles, éditions limitées)
-- [ ] Catégories produits
-- [ ] Moteur de recherche (nom, description, parfum)
-- [ ] Avis clients + modération admin
-- [ ] Liste de souhaits (wishlist)
+- [x] Variantes produits (tailles, éditions limitées)
+- [x] Catégories produits
+- [x] Moteur de recherche (nom, description, parfum)
+- [x] Avis clients + modération admin
+- [x] Liste de souhaits (wishlist)
 
 ## 📣 PHASE 4 — Marketing
 
