@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>INFINI — Suivi de Projet</title>
+<style>
+  :root {
+    --bg:     #0a0704;
+    --bg2:    #17120d;
+    --surface:#1e1710;
+    --gold-1: #5e431c;
+    --gold-2: #a9782d;
+    --gold-3: #dcb254;
+    --gold-4: #f7e3a8;
+    --ink:    #e9dcc0;
+    --muted:  #9c8b66;
+    --line:   #2a2013;
+    --ok:     #c6a355;
+    --progress: #d99a5a;
+    --danger: #b6543f;
+    --white:  #fffaef;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Helvetica Neue',Arial,sans-serif; background:var(--bg); color:var(--ink); }
+  h1, h2, h3 { font-family: Georgia, 'Times New Roman', serif; font-weight:400; }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(135deg, #0a0704 0%, #1a1108 100%);
+    border-bottom: 1px solid var(--line);
+    padding: 0 32px;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .header-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 64px; gap: 20px;
+  }
+  .header-logo { font-size: 18px; font-weight: 700; letter-spacing: .35em; color: var(--gold-4); }
+  .header-progress {
+    display: flex; align-items: center; gap: 12px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--line);
+    border-radius: 999px; padding: 6px 16px;
+  }
+  .header-pct { font-size: 18px; font-weight: 700; color: var(--gold-3); font-family: Georgia, serif; }
+  .header-bar { width: 120px; height: 6px; background: var(--line); border-radius:999px; overflow:hidden; }
+  .header-fill { height:100%; background: linear-gradient(90deg,var(--gold-1),var(--gold-3)); border-radius:999px; transition: width 1s ease; }
+  .header-label { font-size: 11px; opacity: 0.7; letter-spacing: .04em; }
+
+  /* ── HERO ── */
+  .hero {
+    background: radial-gradient(ellipse 120% 80% at 50% -10%, #1a1108, var(--bg) 60%);
+    color: var(--ink); padding: 64px 32px; text-align: center;
+    border-bottom: 1px solid var(--line);
+  }
+  .hero-tag {
+    display: inline-block;
+    background: rgba(220,178,84,0.08); border: 1px solid rgba(220,178,84,0.25); color: var(--gold-3);
+    border-radius: 999px; padding: 5px 18px; font-size: 11px; font-weight: 600;
+    letter-spacing: .12em; text-transform: uppercase; margin-bottom: 22px;
+  }
+  .hero-title { font-size: 44px; margin-bottom: 10px; color: var(--white); }
+  .hero-sub { font-size: 14px; color: var(--muted); margin-bottom: 36px; letter-spacing: .02em; }
+  .hero-big-pct { font-size: 88px; font-weight: 700; font-family: Georgia, serif; color: var(--gold-3); line-height: 1; }
+  .hero-big-pct span { font-size: 40px; opacity: .7; }
+  .hero-tasks { font-size: 14px; color: var(--muted); margin: 10px 0 28px; }
+  .hero-bar-wrap { max-width: 480px; margin: 0 auto; }
+  .hero-bar { height: 10px; background: var(--line); border-radius:999px; overflow:hidden; }
+  .hero-fill { height:100%; background: linear-gradient(90deg,var(--gold-1),var(--gold-3) 60%,var(--gold-4)); border-radius:999px; transition: width 1.2s ease; }
+  .hero-bar-labels { display:flex; justify-content:space-between; font-size:11px; color:var(--muted); margin-top:8px; letter-spacing:.06em; text-transform:uppercase; }
+  .last-update { margin-top: 26px; font-size: 12px; color: var(--muted); }
+  .last-update strong { color: var(--gold-3); }
+
+  /* ── MAIN ── */
+  .main { max-width: 1100px; margin: 0 auto; padding: 48px 32px 20px; }
+
+  .stats { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:44px; }
+  .stat {
+    background: var(--bg2); border-radius: 10px; padding: 22px;
+    border: 1px solid var(--line); text-align: center;
+  }
+  .stat-num { font-size: 32px; font-weight: 700; font-family: Georgia, serif; }
+  .stat-lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 6px; }
+
+  .section-title {
+    font-size: 20px; margin-bottom: 22px; color: var(--white);
+    display: flex; align-items: center; gap: 10px;
+    padding-bottom: 14px; border-bottom: 1px solid var(--line);
+  }
+
+  /* ── PHASE GRID ── */
+  .phases { display: grid; grid-template-columns: repeat(auto-fill,minmax(320px,1fr)); gap: 18px; margin-bottom: 40px; }
+  .phase-card {
+    background: var(--bg2); border-radius: 10px;
+    border: 1px solid var(--line); border-top: 3px solid var(--gold-2);
+    overflow: hidden;
+  }
+  .phase-card-header { padding: 18px 20px; border-bottom: 1px solid var(--line); display:flex; align-items:flex-start; justify-content:space-between; gap: 10px; }
+  .phase-card-title { font-weight: 700; font-size: 15px; font-family: 'Helvetica Neue',Arial,sans-serif; color: var(--white); }
+  .phase-badge {
+    padding: 3px 10px; border-radius: 999px; font-size: 10px; font-weight: 700; white-space: nowrap;
+    text-transform: uppercase; letter-spacing: .04em;
+  }
+  .badge-todo     { background: rgba(156,139,102,.12); color: var(--muted); }
+  .badge-progress { background: rgba(217,154,90,.15);  color: var(--progress); }
+  .badge-done     { background: rgba(220,178,84,.15);  color: var(--gold-3); }
+  .phase-card-body { padding: 18px 20px; }
+  .phase-pct-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+  .phase-pct-num { font-size: 22px; font-weight: 700; font-family: Georgia, serif; color: var(--gold-3); }
+  .phase-tasks-txt { font-size: 12px; color: var(--muted); }
+  .pbar { height: 7px; background: var(--line); border-radius:999px; overflow:hidden; }
+  .pbar-fill { height:100%; border-radius:999px; background: linear-gradient(90deg,var(--gold-1),var(--gold-3)); transition: width 1s ease; }
+
+  /* ── CHECKLIST ── */
+  .checklist-preview { margin-top: 14px; }
+  .check-item {
+    display: flex; align-items: flex-start; gap: 8px;
+    font-size: 12.5px; padding: 4px 0; color: var(--ink);
+  }
+  .check-icon-done   { color: var(--gold-3); flex-shrink:0; }
+  .check-icon-todo   { color: var(--line); flex-shrink:0; }
+  .check-text-done   { color: var(--muted); }
+  .more-tasks        { font-size: 12px; color: var(--gold-3); margin-top: 8px; font-weight: 600; }
+
+  /* ── LOADING / ERROR ── */
+  .loading { text-align:center; padding: 80px; color: var(--muted); }
+  .spinner { width:36px;height:36px;border:3px solid var(--line);border-top-color:var(--gold-3);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  .error-box { background:rgba(182,84,63,.1); border:1px solid rgba(182,84,63,.3); border-radius:10px; padding:20px; text-align:center; color:var(--danger); }
+
+  /* ── CTA ── */
+  .cta-wrap { text-align:center; margin: 44px 0; }
+  .cta-btn {
+    display: inline-flex; align-items:center; gap: 10px;
+    background: linear-gradient(100deg,var(--gold-1),var(--gold-3) 50%,var(--gold-1));
+    color: var(--bg); padding: 15px 32px; border-radius: 4px;
+    text-decoration: none; font-weight: 700; font-size: 13px;
+    letter-spacing: .1em; text-transform: uppercase;
+  }
+
+  footer {
+    background: var(--bg2); color: var(--muted); border-top: 1px solid var(--line);
+    text-align:center; padding: 28px; font-size: 12px;
+  }
+  footer strong { color: var(--gold-3); letter-spacing: .1em; }
+  footer a { color: var(--gold-3); text-decoration:none; }
+
+  @media (max-width: 640px) {
+    .hero-title { font-size: 30px; }
+    .hero-big-pct { font-size: 60px; }
+    .stats { grid-template-columns: repeat(2,1fr); }
+    .header-bar { display:none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="header-logo">INFINI</div>
+    <div class="header-progress">
+      <div>
+        <div class="header-pct" id="hdr-pct">–%</div>
+        <div class="header-label">complété</div>
+      </div>
+      <div class="header-bar"><div class="header-fill" id="hdr-fill" style="width:0%"></div></div>
+    </div>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-tag">Suivi de Projet — Accès Client</div>
+  <div class="hero-title">INFINI — Bougies de Luxe</div>
+  <div class="hero-sub">Plateforme e-commerce sur-mesure · Édition Or Massif · 6 Phases</div>
+  <div class="hero-big-pct" id="big-pct">–<span>%</span></div>
+  <div class="hero-tasks" id="hero-tasks">Chargement…</div>
+  <div class="hero-bar-wrap">
+    <div class="hero-bar"><div class="hero-fill" id="hero-fill" style="width:0%"></div></div>
+    <div class="hero-bar-labels"><span>Démarrage</span><span>Lancement</span></div>
+  </div>
+  <div class="last-update" id="last-update">🕐 Chargement…</div>
+</div>
+
+<div class="main" id="main-content">
+  <div class="loading">
+    <div class="spinner"></div>
+    Chargement de la progression…
+  </div>
+</div>
+
+<footer>
+  <strong>INFINI</strong> · Suivi client · Mis à jour automatiquement à chaque avancement<br>
+  <a href="plan.html">Voir le plan technique complet →</a>
+</footer>
+
+<script>
+const REPO  = 'yanhacking/infini-tracker';
+const BRANCH = 'main';
+const RAW   = `https://raw.githubusercontent.com/${REPO}/${BRANCH}/ROADMAP.md`;
+const API   = `https://api.github.com/repos/${REPO}/commits/${BRANCH}`;
+
+const PHASES = [
+  { id:'p0', label:'🏗️ Phase 0 — Fondations' },
+  { id:'p1', label:'🎨 Phase 1 — CMS complet' },
+  { id:'p2', label:'🛒 Phase 2 — Achat complet' },
+  { id:'p3', label:'🕯️ Phase 3 — Catalogue avancé' },
+  { id:'p4', label:'📣 Phase 4 — Marketing' },
+  { id:'p5', label:'📊 Phase 5 — Data & mise à l\'échelle' },
+];
+
+function parseMarkdown(md) {
+  const lines = md.split('\n');
+  const allDone  = (md.match(/^- \[x\]/gim) || []).length;
+  const allTodo  = (md.match(/^- \[ \]/gm)  || []).length;
+  const allTotal = allDone + allTodo;
+
+  let currentPhase = -1;
+  let phaseSections = Array(PHASES.length).fill(null).map(() => ({ done:0, todo:0, items:[] }));
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const pm = line.match(/^## .+ PHASE (\d)/i);
+    if (pm) {
+      const n = parseInt(pm[1], 10);
+      if (n >= 0 && n < PHASES.length) currentPhase = n;
+    }
+    if (currentPhase < 0) continue;
+
+    const doneMatch = line.match(/^- \[x\]\s+(.+)/i);
+    const todoMatch = line.match(/^- \[ \]\s+(.+)/);
+    if (doneMatch) {
+      phaseSections[currentPhase].done++;
+      phaseSections[currentPhase].items.push({ done: true, text: doneMatch[1] });
+    } else if (todoMatch) {
+      phaseSections[currentPhase].todo++;
+      phaseSections[currentPhase].items.push({ done: false, text: todoMatch[1] });
+    }
+  }
+  return { allDone, allTodo, allTotal, phaseSections };
+}
+
+function formatDate(iso) {
+  const d = new Date(iso);
+  return d.toLocaleDateString('fr-FR', { day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' });
+}
+
+function render(data, lastCommit) {
+  const { allDone, allTodo, allTotal, phaseSections } = data;
+  const pct = allTotal > 0 ? Math.round((allDone / allTotal) * 100) : 0;
+
+  document.getElementById('hdr-pct').textContent  = pct + '%';
+  document.getElementById('hdr-fill').style.width = pct + '%';
+  document.getElementById('big-pct').innerHTML   = pct + '<span>%</span>';
+  const tacheLbl = allDone <= 1 ? 'tâche terminée' : 'tâches terminées';
+  document.getElementById('hero-tasks').textContent = `${allDone} ${tacheLbl} sur ${allTotal} au total`;
+  document.getElementById('hero-fill').style.width  = pct + '%';
+
+  if (lastCommit) {
+    document.getElementById('last-update').innerHTML =
+      `🕐 Dernière mise à jour : <strong>${formatDate(lastCommit.date)}</strong> — "${lastCommit.message}"`;
+  }
+
+  const remaining = allTotal - allDone;
+  const globalStatusColor = pct === 0 ? 'var(--muted)' : pct === 100 ? 'var(--gold-3)' : 'var(--progress)';
+
+  let html = '';
+  html += `<div class="stats">
+    <div class="stat"><div class="stat-num" style="color:var(--gold-3);">${allDone}</div><div class="stat-lbl">Tâches terminées</div></div>
+    <div class="stat"><div class="stat-num" style="color:var(--progress);">${remaining}</div><div class="stat-lbl">Tâches restantes</div></div>
+    <div class="stat"><div class="stat-num" style="color:var(--ink);">${allTotal}</div><div class="stat-lbl">Total tâches</div></div>
+    <div class="stat"><div class="stat-num" style="color:${globalStatusColor};">${pct}%</div><div class="stat-lbl">Avancement global</div></div>
+  </div>`;
+
+  html += `<div class="section-title">Progression par Phase</div>`;
+  html += `<div class="phases">`;
+
+  PHASES.forEach((phase, idx) => {
+    const s      = phaseSections[idx];
+    const total  = s.done + s.todo;
+    const ppct   = total > 0 ? Math.round((s.done / total) * 100) : 0;
+    const status = ppct === 0 ? 'badge-todo' : ppct === 100 ? 'badge-done' : 'badge-progress';
+    const statusLbl = ppct === 0 ? 'À faire' : ppct === 100 ? 'Terminé' : 'En cours';
+
+    const preview = s.items.slice(0, 6);
+    const remainingItems = s.items.length - 6;
+
+    let itemsHtml = '<div class="checklist-preview">';
+    preview.forEach(item => {
+      if (item.done) {
+        itemsHtml += `<div class="check-item"><span class="check-icon-done">●</span><span class="check-text-done">${item.text}</span></div>`;
+      } else {
+        itemsHtml += `<div class="check-item"><span class="check-icon-todo">○</span><span>${item.text}</span></div>`;
+      }
+    });
+    if (remainingItems > 0) {
+      itemsHtml += `<div class="more-tasks">+ ${remainingItems} autres tâches</div>`;
+    }
+    itemsHtml += '</div>';
+
+    html += `
+    <div class="phase-card">
+      <div class="phase-card-header">
+        <div class="phase-card-title">${phase.label}</div>
+        <span class="phase-badge ${status}">${statusLbl}</span>
+      </div>
+      <div class="phase-card-body">
+        <div class="phase-pct-row">
+          <div class="phase-pct-num">${ppct}%</div>
+          <div class="phase-tasks-txt">${s.done} / ${total} tâches</div>
+        </div>
+        <div class="pbar"><div class="pbar-fill" style="width:${ppct}%"></div></div>
+        ${itemsHtml}
+      </div>
+    </div>`;
+  });
+
+  html += `</div>`;
+  html += `<div class="cta-wrap"><a href="plan.html" class="cta-btn">Voir le plan technique complet →</a></div>`;
+
+  document.getElementById('main-content').innerHTML = html;
+}
+
+async function load() {
+  try {
+    const [mdRes, commitRes] = await Promise.all([
+      fetch(RAW + '?_=' + Date.now()),
+      fetch(API, { headers: { 'Accept': 'application/vnd.github.v3+json' } })
+    ]);
+    if (!mdRes.ok) throw new Error('Impossible de charger ROADMAP.md');
+    const md = await mdRes.text();
+    const data = parseMarkdown(md);
+
+    let lastCommit = null;
+    if (commitRes.ok) {
+      const commitData = await commitRes.json();
+      lastCommit = {
+        date:    commitData?.commit?.committer?.date || commitData?.commit?.author?.date,
+        message: commitData?.commit?.message?.split('\n')[0] || ''
+      };
+    }
+    render(data, lastCommit);
+  } catch (err) {
+    document.getElementById('main-content').innerHTML = `
+      <div class="error-box">
+        ⚠️ Impossible de charger la progression. Réessayez dans quelques instants.<br>
+        <small style="opacity:0.7;margin-top:8px;display:block;">${err.message}</small>
+      </div>`;
+  }
+}
+
+load();
+setInterval(load, 5 * 60 * 1000);
+</script>
+</body>
+</html>

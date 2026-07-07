@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>INFINI — Plan Technique</title>
+<style>
+  :root {
+    --bg: #0a0704; --bg2:#17120d; --surface:#1e1710;
+    --gold-1:#5e431c; --gold-2:#a9782d; --gold-3:#dcb254; --gold-4:#f7e3a8;
+    --ink:#e9dcc0; --muted:#9c8b66; --line:#2a2013; --white:#fffaef;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Helvetica Neue',Arial,sans-serif; background:var(--bg); color:var(--ink); line-height:1.7; }
+  h1,h2,h3 { font-family:Georgia,'Times New Roman',serif; font-weight:400; color:var(--white); }
+  a { color:var(--gold-3); }
+
+  header {
+    background: linear-gradient(135deg, #0a0704 0%, #1a1108 100%);
+    border-bottom: 1px solid var(--line); padding: 20px 32px; position: sticky; top:0;
+  }
+  .header-inner { max-width:900px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; }
+  .header-logo { font-size:18px; font-weight:700; letter-spacing:.35em; color:var(--gold-4); }
+  .back-link { font-size:12px; text-decoration:none; letter-spacing:.06em; text-transform:uppercase; }
+
+  .hero { text-align:center; padding:60px 32px 40px; border-bottom:1px solid var(--line); }
+  .hero-tag { display:inline-block; background:rgba(220,178,84,.08); border:1px solid rgba(220,178,84,.25); color:var(--gold-3);
+    border-radius:999px; padding:5px 18px; font-size:11px; letter-spacing:.12em; text-transform:uppercase; margin-bottom:20px; }
+  .hero h1 { font-size:38px; margin-bottom:10px; }
+  .hero p { color:var(--muted); font-size:14px; }
+
+  .main { max-width: 780px; margin:0 auto; padding:56px 32px; }
+  section { margin-bottom:52px; }
+  section h2 { font-size:24px; margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid var(--line); }
+  section h3 { font-size:16px; color:var(--gold-3); margin:22px 0 8px; }
+  p { color:var(--ink); opacity:.92; margin-bottom:12px; font-size:14.5px; }
+  ul { margin:0 0 12px 20px; color:var(--ink); opacity:.92; font-size:14.5px; }
+  li { margin-bottom:6px; }
+  strong { color:var(--white); }
+  code { background:var(--bg2); border:1px solid var(--line); padding:2px 7px; border-radius:4px; font-size:.85em; color:var(--gold-3); }
+
+  .badge-row { display:flex; flex-wrap:wrap; gap:8px; margin:16px 0; }
+  .badge { background:var(--bg2); border:1px solid var(--line); color:var(--gold-3); padding:6px 14px; border-radius:999px; font-size:12.5px; }
+
+  .arch-tree { background:var(--bg2); border:1px solid var(--line); border-radius:8px; padding:20px 24px; font-family:'Consolas',monospace; font-size:13px; color:var(--muted); overflow-x:auto; white-space:pre; }
+  .arch-tree strong { color:var(--gold-3); font-family:'Consolas',monospace; }
+
+  .card-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; margin-top:16px; }
+  .mini-card { background:var(--bg2); border:1px solid var(--line); border-top:3px solid var(--gold-2); border-radius:8px; padding:16px 18px; }
+  .mini-card h4 { font-family:'Helvetica Neue',Arial,sans-serif; font-size:13.5px; font-weight:700; color:var(--white); margin-bottom:6px; }
+  .mini-card p { font-size:12.5px; margin:0; color:var(--muted); }
+
+  footer { text-align:center; padding:28px; color:var(--muted); font-size:12px; border-top:1px solid var(--line); background:var(--bg2); }
+  footer strong { color:var(--gold-3); letter-spacing:.1em; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="header-logo">INFINI</div>
+    <a class="back-link" href="index.html">← Retour au suivi</a>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-tag">Plan Technique Complet</div>
+  <h1>Architecture de la plateforme INFINI</h1>
+  <p>Boutique de bougies de luxe — édition Or Massif</p>
+</div>
+
+<div class="main">
+
+  <section>
+    <h2>Contexte</h2>
+    <p>INFINI est une plateforme e-commerce sur-mesure construite pour vendre des bougies de luxe, avec une exigence centrale : <strong>zéro contenu codé en dur</strong>. Tout ce que voit le client (textes, photos, vidéos, pages, produits) est géré depuis un panel d'administration, sans intervention du développeur.</p>
+    <p>Le frontend est une expérience cinématique (défilement piloté par vidéo, façon Apple), et le backend est une API REST PHP/MySQL conçue dès le départ pour supporter la croissance de la marque sur plusieurs années.</p>
+  </section>
+
+  <section>
+    <h2>Stack technique</h2>
+    <div class="badge-row">
+      <span class="badge">PHP 8 + PDO</span>
+      <span class="badge">MySQL</span>
+      <span class="badge">API REST versionnée (/api/v1)</span>
+      <span class="badge">Vite + JavaScript vanilla</span>
+      <span class="badge">GSAP + ScrollTrigger</span>
+      <span class="badge">Lenis (smooth scroll)</span>
+      <span class="badge">Stripe</span>
+      <span class="badge">PayPal</span>
+      <span class="badge">Goshippo</span>
+    </div>
+  </section>
+
+  <section>
+    <h2>Architecture</h2>
+    <div class="arch-tree">infini/
+├── <strong>api/v1/</strong>          → API REST PHP (produits, commandes, auth, paiement, expédition)
+│   ├── src/Controllers/  → logique des routes
+│   ├── src/Models/       → accès base de données (PDO)
+│   ├── src/Services/     → Stripe, PayPal, Goshippo, optimisation média
+│   └── database/         → schéma complet + données de départ
+│
+├── <strong>admin/</strong>           → Panel d'administration (rôles, CMS, produits, commandes)
+│
+└── <strong>infini-cinematic/</strong> → Site public (expérience cinématique, panier, compte client)</div>
+  </section>
+
+  <section>
+    <h2>Base de données</h2>
+    <p>Le schéma couvre dès aujourd'hui l'ensemble des besoins prévus, pour ne jamais avoir à re-migrer en cassant l'existant :</p>
+    <div class="card-grid">
+      <div class="mini-card"><h4>Catalogue</h4><p>Produits, variantes, catégories, médias, notes olfactives</p></div>
+      <div class="mini-card"><h4>Comptes & rôles</h4><p>Clients, adresses, administrateurs (super admin / admin / gestionnaire)</p></div>
+      <div class="mini-card"><h4>Commandes</h4><p>Commandes, articles, historique complet des statuts</p></div>
+      <div class="mini-card"><h4>CMS</h4><p>Pages en blocs, réglages globaux, bibliothèque média</p></div>
+      <div class="mini-card"><h4>Marketing</h4><p>Avis clients, liste de souhaits, newsletter, coupons</p></div>
+      <div class="mini-card"><h4>Observabilité</h4><p>Journal d'activité admin, statistiques internes, tentatives de connexion</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Paiement & Expédition</h2>
+    <ul>
+      <li><strong>Stripe</strong> — Payment Intents créés côté serveur, montant jamais confié au navigateur ; confirmation finale uniquement via webhook signé.</li>
+      <li><strong>PayPal</strong> — Orders API v2, capture sécurisée, webhook vérifié par signature.</li>
+      <li><strong>Goshippo</strong> — Au moment du paiement, le client voit <strong>tous les tarifs de tous les transporteurs</strong> disponibles pour son adresse ; une fois payée, l'étiquette est achetée automatiquement et le suivi apparaît dans son espace client.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Sécurité</h2>
+    <p>Appliquée à chaque couche, pas comme une étape à part : requêtes préparées partout (aucune injection SQL possible), mots de passe hashés, jetons CSRF sur les formulaires admin, limitation des tentatives de connexion, en-têtes de sécurité HTTP, et un journal d'activité qui trace chaque action administrative.</p>
+  </section>
+
+  <section>
+    <h2>Phasage</h2>
+    <p>Le projet est livré par phases pour rester maîtrisable et vérifiable à chaque étape — voir le détail et l'avancement en temps réel sur la <a href="index.html">page de suivi</a>.</p>
+  </section>
+
+</div>
+
+<footer>
+  <strong>INFINI</strong> · Plan technique · Mis à jour au fil du projet
+</footer>
+
+</body>
+</html>
